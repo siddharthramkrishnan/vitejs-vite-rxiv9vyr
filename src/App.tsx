@@ -478,7 +478,7 @@ export default function RegulatoryDashboard() {
   };
 
   const fetchSheet = async (gid) => {
-    const url = `/sheets?output=csv&gid=${gid}`;
+    const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3kQLUJGUpIEU45v5omXE41qAbRZEUA7v0Y7754cpjIh2-tUzedjz4o17tCJaMcw/pub?output=csv&gid=${gid}`;
     const r = await fetchWithTimeout(url, 8000);
     if (r.ok) return r.text();
     throw new Error('Failed to fetch sheet');
