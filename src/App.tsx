@@ -334,27 +334,24 @@ function PdfBtn({
   border = '#bfdbfe',
 }) {
   if (!url) return <span style={{ color: '#cbd5e1', fontSize: 11 }}>—</span>;
+  const btnStyle = {
+    display: 'inline-flex', alignItems: 'center', gap: 3,
+    padding: '2px 8px', borderRadius: 5, background: bg,
+    color, border: `1px solid ${border}`, fontSize: 10,
+    fontWeight: 600, textDecoration: 'none',
+  };
+  const dlUrl = url.includes('drive.google.com')
+    ? url.replace('/view', '/export?format=pdf').replace('?usp=drive_link', '')
+    : url;
   return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 3,
-        padding: '2px 8px',
-        borderRadius: 5,
-        background: bg,
-        color,
-        border: `1px solid ${border}`,
-        fontSize: 10,
-        fontWeight: 600,
-        textDecoration: 'none',
-      }}
-    >
-      📄 View PDF
-    </a>
+    <div style={{ display: 'inline-flex', gap: 4, flexWrap: 'wrap' }}>
+      <a href={url} target="_blank" rel="noopener noreferrer" style={btnStyle}>
+        📄 View
+      </a>
+      <a href={dlUrl} target="_blank" rel="noopener noreferrer" style={{ ...btnStyle, background: '#f0fdf4', color: '#16a34a', border: '1px solid #86efac' }}>
+        ⬇️ Download
+      </a>
+    </div>
   );
 }
 
