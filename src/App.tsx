@@ -569,15 +569,27 @@ export default function RegulatoryDashboard() {
 
   // Stats
   const stats = useMemo(() => {
+    const mlActiveNames = new Set(
+      mlData
+        .filter((r) => r.expiryStatus === 'active')
+        .map((r) => r.name?.toLowerCase().trim())
+    );
+
     const tlActive = tlData.filter((r) => r.expiryStatus === 'active');
     const mlActive = mlData.filter((r) => r.expiryStatus === 'active');
-    const tlExpiring = tlData.filter((r) =>
-      ['critical', 'warning'].includes(r.expiryStatus)
+    const tlExpiring = tlData.filter(
+      (r) =>
+        ['critical', 'warning'].includes(r.expiryStatus) &&
+        !mlActiveNames.has(r.name?.toLowerCase().trim())
     );
     const mlExpiring = mlData.filter((r) =>
       ['critical', 'warning'].includes(r.expiryStatus)
     );
-    const tlExpired = tlData.filter((r) => r.expiryStatus === 'expired');
+    const tlExpired = tlData.filter(
+      (r) =>
+        r.expiryStatus === 'expired' &&
+        !mlActiveNames.has(r.name?.toLowerCase().trim())
+    );
     const mlExpired = mlData.filter((r) => r.expiryStatus === 'expired');
     const planTotal = planData.length;
     const planSubmitted = planData.filter((r) =>
@@ -596,6 +608,7 @@ export default function RegulatoryDashboard() {
       planTotal,
       planSubmitted,
       planPending,
+      mlActiveNames,
     };
   }, [tlData, mlData, planData]);
 
@@ -1876,20 +1889,31 @@ export default function RegulatoryDashboard() {
                             {r.licNo}
                           </td>
                           <td
-                            style={{
-                              padding: '8px 12px',
-                              fontWeight: 600,
-                              color: '#0f172a',
-                              maxWidth: 200,
-                            }}
-                          >
-                            {r.name}
-                            {r.pdfUrl && (
-                              <div style={{ marginTop: 4 }}>
-                                <PdfBtn url={r.pdfUrl} />
-                              </div>
-                            )}
-                          </td>
+  style={{
+    padding: '8px 12px',
+    fontWeight: 600,
+    color: '#0f172a',
+    maxWidth: 200,
+  }}
+>
+  {r.name}
+  {stats.mlActiveNames.has(r.name?.toLowerCase().trim()) && (
+    <div style={{ marginTop: 3 }}>
+      <span style={{
+        fontSize: 9, fontWeight: 700, background: '#dcfce7',
+        color: '#16a34a', padding: '1px 6px', borderRadius: 4,
+        border: '1px solid #86efac'
+      }}>
+        🏭 ML Active — TL expiry N/A
+      </span>
+    </div>
+  )}
+  {r.pdfUrl && (
+    <div style={{ marginTop: 4 }}>
+      <PdfBtn url={r.pdfUrl} />
+    </div>
+  )}
+</td>
                           <td style={{ padding: '8px 12px' }}>
                             <RiskBadge risk={r.risk} />
                           </td>
