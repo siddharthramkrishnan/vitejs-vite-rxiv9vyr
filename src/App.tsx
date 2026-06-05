@@ -158,9 +158,14 @@ function parseDate(s) {
   const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
   if (dmy)
     return new Date(parseInt(dmy[3]), parseInt(dmy[2]) - 1, parseInt(dmy[1]));
+  const dmyDash = s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (dmyDash)
+    return new Date(parseInt(dmyDash[3]), parseInt(dmyDash[2]) - 1, parseInt(dmyDash[1]));
   const d = new Date(s);
   return isNaN(d) ? null : d;
+  
 }
+
 const daysUntil = (d) => (d ? Math.ceil((d - TODAY) / 86400000) : null);
 const isApplied2026 = (s) => s && s.includes('/2026/');
 
