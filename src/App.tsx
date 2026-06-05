@@ -823,7 +823,6 @@ export default function RegulatoryDashboard() {
                 sub: 'Total submissions',
                 color: '#2563eb',
               },
-            
               {
                 icon: '✅',
                 label: 'Submitted',
