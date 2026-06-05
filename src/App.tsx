@@ -123,6 +123,8 @@ function parsePlan(rows) {
       body: r[3]?.trim(),
       targetDate: r[4]?.trim(),
       status: r[5]?.trim() || 'Planned',
+      applicationDate: r[6]?.trim(),
+      cdscoStatus: r[7]?.trim(),
     });
   }
   return data;
@@ -260,6 +262,41 @@ function PlanBadge({ status }) {
         : '🔵'}{' '}
       {status}
     </span>
+  );
+}
+function AgingBadge({ applicationDate, cdscoStatus }) {
+  if (!applicationDate || applicationDate === 'NA' || applicationDate === '—') {
+    return <span style={{ color: '#94a3b8', fontSize: 11 }}>Not submitted</span>;
+  }
+  const d = parseDate(applicationDate);
+  if (!d) return <span style={{ color: '#94a3b8', fontSize: 11 }}>—</span>;
+  const days = Math.ceil((TODAY - d) / 86400000);
+  const isApproved = cdscoStatus?.toLowerCase().includes('approved');
+  const color = isApproved ? '#22c55e' : days > 90 ? '#ef4444' : days > 45 ? '#f97316' : '#eab308';
+  const bg = isApproved ? '#f0fdf4' : days > 90 ? '#fef2f2' : days > 45 ? '#fff7ed' : '#fefce8';
+  const label = isApproved ? '✅ Approved' : `⏳ ${days}d pending`;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <span style={{
+        display: 'inline-flex', alignItems: 'center', gap: 4,
+        padding: '2px 8px', borderRadius: 20, fontSize: 11,
+        fontWeight: 700, color, background: bg, border: `1px solid ${color}33`,
+        whiteSpace: 'nowrap'
+      }}>
+        {label}
+      </span>
+      {!isApproved && (
+        <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, width: 100 }}>
+          <div style={{
+            height: '100%', borderRadius: 2, background: color,
+            width: `${Math.min(100, (days / 120) * 100)}%`
+          }} />
+        </div>
+      )}
+      {cdscoStatus && cdscoStatus !== 'NA' && (
+        <span style={{ fontSize: 10, color: '#64748b' }}>{cdscoStatus}</span>
+      )}
+    </div>
   );
 }
 
@@ -780,6 +817,21 @@ export default function RegulatoryDashboard() {
                 value: stats.planTotal,
                 sub: 'Total submissions',
                 color: '#2563eb',
+              },
+              {
+                icon: '⏱',
+                label: 'Avg Approval Lag',
+                value: (() => {
+                  const submitted = planData.filter(r => r.applicationDate && r.applicationDate !== 'NA');
+                  if (!submitted.length) return '—';
+                  const avg = submitted.reduce((sum, r) => {
+                    const d = parseDate(r.applicationDate);
+                    return sum + (d ? Math.ceil((TODAY - d) / 86400000) : 0);
+                  }, 0) / submitted.length;
+                  return `${Math.round(avg)}d`;
+                })(),
+                sub: 'Since application',
+                color: '#0891b2',
               },
               {
                 icon: '✅',
@@ -1574,9 +1626,11 @@ export default function RegulatoryDashboard() {
                         '#',
                         'Product',
                         'Type',
-                        'Regulatory Body',
+                        'Regulatory Portal',
                         'Target Date',
                         'Status',
+                        'Applied On',
+                        'CDSCO Status / Lag',
                       ].map((h) => (
                         <th
                           key={h}
@@ -1663,6 +1717,12 @@ export default function RegulatoryDashboard() {
                           <td style={{ padding: '12px 14px' }}>
                             <PlanBadge status={r.status} />
                           </td>
+                          <td style={{ padding: '12px 14px' }}>
+                          {r.applicationDate && r.applicationDate !== 'NA' ? r.applicationDate : '—'}
+                          </td>
+                          <td style={{ padding: '12px 14px' }}>
+                          <AgingBadge applicationDate={r.applicationDate} cdscoStatus={r.cdscoStatus} />
+                            </td>
                         </tr>
                       );
                     })}
