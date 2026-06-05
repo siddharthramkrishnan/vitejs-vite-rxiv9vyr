@@ -823,21 +823,7 @@ export default function RegulatoryDashboard() {
                 sub: 'Total submissions',
                 color: '#2563eb',
               },
-              {
-                icon: '⏱',
-                label: 'Avg Approval Lag',
-                value: (() => {
-                  const submitted = planData.filter(r => r.applicationDate && r.applicationDate !== 'NA');
-                  if (!submitted.length) return '—';
-                  const avg = submitted.reduce((sum, r) => {
-                    const d = parseDate(r.applicationDate);
-                    return sum + (d ? Math.ceil((TODAY - d) / 86400000) : 0);
-                  }, 0) / submitted.length;
-                  return `${Math.round(avg)}d`;
-                })(),
-                sub: 'Since application',
-                color: '#0891b2',
-              },
+            
               {
                 icon: '✅',
                 label: 'Submitted',
