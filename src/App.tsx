@@ -125,6 +125,7 @@ function parsePlan(rows) {
       status: r[5]?.trim() || 'Planned',
       applicationDate: r[6]?.trim(),
       cdscoStatus: r[7]?.trim(),
+      grantedDate: r[8]?.trim(),
     });
   }
   return data;
@@ -213,6 +214,7 @@ const PLAN_STATUS_META = {
   Submitted: { color: '#8b5cf6', bg: '#f5f3ff', border: '#c4b5fd' },
   Approved: { color: '#16a34a', bg: '#dcfce7', border: '#4ade80' },
   Delayed: { color: '#f97316', bg: '#fff7ed', border: '#fdba74' },
+  Granted: { color: '#16a34a', bg: '#dcfce7', border: '#4ade80' },
 };
 
 const RISK_COLOR = { A: '#6366f1', B: '#3b82f6', C: '#f97316' };
@@ -260,7 +262,7 @@ function PlanBadge({ status }) {
         border: `1px solid ${m.border}`,
       }}
     >
-      {status === 'Applied' || status === 'Approved'
+      {status === 'Applied' || status === 'Approved' || status === 'Granted'
         ? '✅'
         : status === 'Delayed'
         ? '⚠️'
@@ -269,17 +271,36 @@ function PlanBadge({ status }) {
     </span>
   );
 }
-function AgingBadge({ applicationDate, cdscoStatus }) {
+function AgingBadge({ applicationDate, cdscoStatus, grantedDate }) {
   if (!applicationDate || applicationDate === 'NA' || applicationDate === '—') {
     return <span style={{ color: '#94a3b8', fontSize: 11 }}>Not submitted</span>;
   }
-  const d = parseDate(applicationDate);
-  if (!d) return <span style={{ color: '#94a3b8', fontSize: 11 }}>—</span>;
-  const days = Math.ceil((TODAY - d) / 86400000);
-  const isApproved = cdscoStatus?.toLowerCase().includes('approved');
-  const color = isApproved ? '#22c55e' : days > 90 ? '#ef4444' : days > 45 ? '#f97316' : '#eab308';
-  const bg = isApproved ? '#f0fdf4' : days > 90 ? '#fef2f2' : days > 45 ? '#fff7ed' : '#fefce8';
-  const label = isApproved ? '✅ Approved' : `⏳ ${days}d pending`;
+  const appD = parseDate(applicationDate);
+  if (!appD) return <span style={{ color: '#94a3b8', fontSize: 11 }}>—</span>;
+
+  const fmt = (d) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  const grantD = grantedDate && grantedDate !== 'NA' && grantedDate !== '—' ? parseDate(grantedDate) : null;
+  if (grantD) {
+    const days = Math.ceil((grantD - appD) / 86400000);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <span style={{
+          display: 'inline-flex', alignItems: 'center', gap: 4,
+          padding: '2px 8px', borderRadius: 20, fontSize: 11,
+          fontWeight: 700, color: '#16a34a', background: '#dcfce7',
+          border: '1px solid #4ade8033', whiteSpace: 'nowrap'
+        }}>
+          ✅ Granted in {days}d
+        </span>
+        <span style={{ fontSize: 10, color: '#64748b' }}>{fmt(appD)} → {fmt(grantD)}</span>
+      </div>
+    );
+  }
+
+  const days = Math.ceil((TODAY - appD) / 86400000);
+  const color = days > 90 ? '#ef4444' : days > 45 ? '#f97316' : '#eab308';
+  const bg = days > 90 ? '#fef2f2' : days > 45 ? '#fff7ed' : '#fefce8';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <span style={{
@@ -288,16 +309,14 @@ function AgingBadge({ applicationDate, cdscoStatus }) {
         fontWeight: 700, color, background: bg, border: `1px solid ${color}33`,
         whiteSpace: 'nowrap'
       }}>
-        {label}
+        ⏳ {days}d pending
       </span>
-      {!isApproved && (
-        <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, width: 100 }}>
-          <div style={{
-            height: '100%', borderRadius: 2, background: color,
-            width: `${Math.min(100, (days / 120) * 100)}%`
-          }} />
-        </div>
-      )}
+      <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, width: 100 }}>
+        <div style={{
+          height: '100%', borderRadius: 2, background: color,
+          width: `${Math.min(100, (days / 120) * 100)}%`
+        }} />
+      </div>
       {cdscoStatus && cdscoStatus !== 'NA' && (
         <span style={{ fontSize: 10, color: '#64748b' }}>{cdscoStatus}</span>
       )}
@@ -593,7 +612,7 @@ export default function RegulatoryDashboard() {
     const mlExpired = mlData.filter((r) => r.expiryStatus === 'expired');
     const planTotal = planData.length;
     const planSubmitted = planData.filter((r) =>
-      ['Applied', 'Submitted', 'Approved'].includes(r.status)
+      ['Applied', 'Submitted', 'Approved', 'Granted'].includes(r.status)
     ).length;
     const planPending = planData.filter((r) =>
       ['Planned', 'Delayed'].includes(r.status)
@@ -1724,7 +1743,7 @@ export default function RegulatoryDashboard() {
                           {r.applicationDate && r.applicationDate !== 'NA' ? r.applicationDate : '—'}
                           </td>
                           <td style={{ padding: '12px 14px' }}>
-                          <AgingBadge applicationDate={r.applicationDate} cdscoStatus={r.cdscoStatus} />
+                          <AgingBadge applicationDate={r.applicationDate} cdscoStatus={r.cdscoStatus} grantedDate={r.grantedDate} />
                             </td>
                         </tr>
                       );
