@@ -262,8 +262,10 @@ function PlanBadge({ status }) {
         border: `1px solid ${m.border}`,
       }}
     >
-      {status === 'Applied' || status === 'Approved' || status === 'Granted'
+      {status === 'Granted' || status === 'Approved'
         ? '✅'
+        : status === 'Applied'
+        ? '📤'
         : status === 'Delayed'
         ? '⚠️'
         : '🔵'}{' '}
