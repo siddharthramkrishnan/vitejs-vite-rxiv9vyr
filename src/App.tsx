@@ -1082,9 +1082,16 @@ export default function RegulatoryDashboard() {
                               alignItems: 'center',
                             }}
                           >
-                            <span style={{ fontSize: 11, color: '#64748b' }}>
-                              🎯 {r.targetDate}
-                            </span>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                              <span style={{ fontSize: 11, color: '#64748b' }}>
+                                🎯 {r.targetDate}
+                              </span>
+                              {r.grantedDate && r.grantedDate !== 'NA' && r.grantedDate !== '—' && (
+                                <span style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>
+                                  📄 {r.grantedDate}
+                                </span>
+                              )}
+                            </div>
                             <PlanBadge status={r.status} />
                           </div>
                         </div>
