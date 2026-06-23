@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useState, useEffect, useMemo } from 'react';
 
-const TODAY = new Date('2026-06-03');
+const TODAY = new Date();
 const SHEET_ID =
   '2PACX-1vQ3kQLUJGUpIEU45v5omXE41qAbRZEUA7v0Y7754cpjIh2-tUzedjz4o17tCJaMcw';
 
@@ -183,41 +183,41 @@ function getExpiryStatus(expiry) {
 const STATUS_META = {
   expired: {
     label: 'Expired',
-    color: '#ef4444',
-    bg: '#fef2f2',
-    dot: '#ef4444',
+    color: '#E0683C',
+    bg: '#FBEDE6',
+    dot: '#E0683C',
   },
   critical: {
     label: 'Critical',
-    color: '#f97316',
-    bg: '#fff7ed',
-    dot: '#f97316',
+    color: '#E8A33D',
+    bg: '#FCF4E6',
+    dot: '#E8A33D',
   },
   warning: {
     label: 'Expiring Soon',
-    color: '#eab308',
-    bg: '#fefce8',
-    dot: '#eab308',
+    color: '#E8A33D',
+    bg: '#FCF4E6',
+    dot: '#E8A33D',
   },
-  active: { label: 'Active', color: '#22c55e', bg: '#f0fdf4', dot: '#22c55e' },
+  active: { label: 'Active', color: '#2E9E6B', bg: '#EAF6F0', dot: '#2E9E6B' },
   unknown: {
     label: 'Unknown',
     color: '#94a3b8',
-    bg: '#f8fafc',
+    bg: '#F4F5F5',
     dot: '#94a3b8',
   },
 };
 
 const PLAN_STATUS_META = {
-  Applied: { color: '#22c55e', bg: '#f0fdf4', border: '#86efac' },
-  Planned: { color: '#3b82f6', bg: '#eff6ff', border: '#93c5fd' },
-  Submitted: { color: '#8b5cf6', bg: '#f5f3ff', border: '#c4b5fd' },
-  Approved: { color: '#16a34a', bg: '#dcfce7', border: '#4ade80' },
-  Delayed: { color: '#f97316', bg: '#fff7ed', border: '#fdba74' },
-  Granted: { color: '#16a34a', bg: '#dcfce7', border: '#4ade80' },
+  Applied: { color: '#2E9E6B', bg: '#EAF6F0', border: '#2E9E6B44' },
+  Planned: { color: '#2A6FA8', bg: '#E4F2F3', border: '#C5D8DA' },
+  Submitted: { color: '#7A4F9E', bg: '#F4F0F9', border: '#7A4F9E44' },
+  Approved: { color: '#2E9E6B', bg: '#EAF6F0', border: '#2E9E6B44' },
+  Delayed: { color: '#E8A33D', bg: '#FCF4E6', border: '#E8A33D44' },
+  Granted: { color: '#2E9E6B', bg: '#EAF6F0', border: '#2E9E6B44' },
 };
 
-const RISK_COLOR = { A: '#6366f1', B: '#3b82f6', C: '#f97316' };
+const RISK_COLOR = { A: '#2A6FA8', B: '#E8A33D', C: '#E0683C' };
 
 // ── COMPONENTS ────────────────────────────────────────────────────────────────
 function Badge({ status }) {
@@ -290,7 +290,7 @@ function AgingBadge({ applicationDate, cdscoStatus, grantedDate }) {
         <span style={{
           display: 'inline-flex', alignItems: 'center', gap: 4,
           padding: '2px 8px', borderRadius: 20, fontSize: 11,
-          fontWeight: 700, color: '#16a34a', background: '#dcfce7',
+          fontWeight: 700, color: '#2E9E6B', background: '#EAF6F0',
           border: '1px solid #4ade8033', whiteSpace: 'nowrap'
         }}>
           ✅ Granted in {days}d
@@ -301,8 +301,8 @@ function AgingBadge({ applicationDate, cdscoStatus, grantedDate }) {
   }
 
   const days = Math.ceil((TODAY - appD) / 86400000);
-  const color = days > 90 ? '#ef4444' : days > 45 ? '#f97316' : '#eab308';
-  const bg = days > 90 ? '#fef2f2' : days > 45 ? '#fff7ed' : '#fefce8';
+  const color = days > 90 ? '#E0683C' : days > 45 ? '#E8A33D' : '#E8A33D';
+  const bg = days > 90 ? '#FBEDE6' : days > 45 ? '#FCF4E6' : '#FCF4E6';
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <span style={{
@@ -313,7 +313,7 @@ function AgingBadge({ applicationDate, cdscoStatus, grantedDate }) {
       }}>
         ⏳ {days}d pending
       </span>
-      <div style={{ height: 4, background: '#f1f5f9', borderRadius: 2, width: 100 }}>
+      <div style={{ height: 4, background: '#E4F2F3', borderRadius: 2, width: 100 }}>
         <div style={{
           height: '100%', borderRadius: 2, background: color,
           width: `${Math.min(100, (days / 120) * 100)}%`
@@ -352,7 +352,7 @@ function ExpiryBar({ expiry }) {
   const days = daysUntil(d);
   if (days < 0)
     return (
-      <span style={{ color: '#ef4444', fontSize: 12, fontWeight: 600 }}>
+      <span style={{ color: '#E0683C', fontSize: 12, fontWeight: 600 }}>
         Expired {Math.abs(days)}d ago
       </span>
     );
@@ -372,7 +372,7 @@ function ExpiryBar({ expiry }) {
       <div
         style={{
           height: 5,
-          background: '#f1f5f9',
+          background: '#E4F2F3',
           borderRadius: 3,
           width: 110,
         }}
@@ -392,9 +392,9 @@ function ExpiryBar({ expiry }) {
 
 function PdfBtn({
   url,
-  color = '#2563eb',
-  bg = '#eff6ff',
-  border = '#bfdbfe',
+  color = '#017481',
+  bg = '#E4F2F3',
+  border = '#C5D8DA',
 }) {
   if (!url) return <span style={{ color: '#cbd5e1', fontSize: 11 }}>—</span>;
   const btnStyle = {
@@ -411,7 +411,7 @@ function PdfBtn({
       <a href={url} target="_blank" rel="noopener noreferrer" style={btnStyle}>
         📄 View
       </a>
-      <a href={dlUrl} target="_blank" rel="noopener noreferrer" style={{ ...btnStyle, background: '#f0fdf4', color: '#16a34a', border: '1px solid #86efac' }}>
+      <a href={dlUrl} target="_blank" rel="noopener noreferrer" style={{ ...btnStyle, background: '#EAF6F0', color: '#2E9E6B', border: '1px solid #86efac' }}>
         ⬇️ Download
       </a>
     </div>
@@ -454,7 +454,8 @@ function SectionCard({ children, style }) {
       style={{
         background: '#fff',
         borderRadius: 12,
-        boxShadow: '0 1px 4px rgba(0,0,0,.07)',
+        border: '1px solid #C5D8DA',
+        boxShadow: '0 1px 3px rgba(1,45,51,0.05)',
         padding: 20,
         ...style,
       }}
@@ -464,7 +465,7 @@ function SectionCard({ children, style }) {
   );
 }
 
-function SectionTitle({ icon, title, count, color = '#0f172a' }) {
+function SectionTitle({ icon, title, count, color = '#012D33' }) {
   return (
     <div
       style={{
@@ -477,14 +478,14 @@ function SectionTitle({ icon, title, count, color = '#0f172a' }) {
       <div
         style={{ width: 4, height: 22, background: color, borderRadius: 2 }}
       />
-      <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>
+      <span style={{ fontSize: 15, fontWeight: 700, color: '#012D33' }}>
         {icon} {title}
       </span>
       {count !== undefined && (
         <span
           style={{
             marginLeft: 4,
-            background: '#f1f5f9',
+            background: '#E4F2F3',
             color: '#475569',
             borderRadius: 20,
             padding: '1px 10px',
@@ -507,9 +508,9 @@ const filterBtn = (active) => ({
   cursor: 'pointer',
   border: '1px solid',
   transition: 'all .15s',
-  background: active ? '#2563eb' : '#fff',
+  background: active ? '#017481' : '#fff',
   color: active ? '#fff' : '#64748b',
-  borderColor: active ? '#2563eb' : '#e2e8f0',
+  borderColor: active ? '#017481' : '#C5D8DA',
 });
 
 // ── MAIN ─────────────────────────────────────────────────────────────────────
@@ -692,7 +693,7 @@ export default function RegulatoryDashboard() {
     cursor: 'pointer',
     border: 'none',
     background: tab === id ? '#fff' : 'transparent',
-    color: tab === id ? '#1e40af' : '#64748b',
+    color: tab === id ? '#017481' : '#64748b',
     borderBottom: tab === id ? '2px solid #2563eb' : '2px solid transparent',
   });
 
@@ -704,8 +705,8 @@ export default function RegulatoryDashboard() {
   return (
     <div
       style={{
-        fontFamily: "'Inter',system-ui,sans-serif",
-        background: '#f8fafc',
+        fontFamily: "'Source Sans 3',system-ui,sans-serif",
+        background: '#F4F5F5',
         minHeight: '100vh',
         padding: '20px 24px',
       }}
@@ -735,7 +736,7 @@ export default function RegulatoryDashboard() {
                 width: 36,
                 height: 36,
                 borderRadius: 8,
-                background: 'linear-gradient(135deg,#2563eb,#7c3aed)',
+                background: 'linear-gradient(135deg,#012D33,#017481)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -750,7 +751,7 @@ export default function RegulatoryDashboard() {
                 margin: 0,
                 fontSize: 22,
                 fontWeight: 800,
-                color: '#0f172a',
+                color: '#012D33',
               }}
             >
               Regulatory Approval Dashboard
@@ -777,7 +778,7 @@ export default function RegulatoryDashboard() {
               gap: 6,
               padding: '8px 16px',
               borderRadius: 8,
-              background: '#2563eb',
+              background: '#017481',
               color: '#fff',
               border: 'none',
               fontWeight: 600,
@@ -808,12 +809,12 @@ export default function RegulatoryDashboard() {
       {error && (
         <div
           style={{
-            background: '#fef2f2',
+            background: '#FBEDE6',
             border: '1px solid #fecaca',
             borderRadius: 10,
             padding: '12px 18px',
             marginBottom: 16,
-            color: '#dc2626',
+            color: '#E0683C',
             fontSize: 13,
           }}
         >
@@ -824,7 +825,7 @@ export default function RegulatoryDashboard() {
               marginLeft: 12,
               padding: '3px 10px',
               borderRadius: 6,
-              background: '#dc2626',
+              background: '#E0683C',
               color: '#fff',
               border: 'none',
               cursor: 'pointer',
@@ -855,42 +856,42 @@ export default function RegulatoryDashboard() {
                 label: 'H1 2026 Planned',
                 value: stats.planTotal,
                 sub: 'Total submissions',
-                color: '#2563eb',
+                color: '#017481',
               },
               {
                 icon: '✅',
                 label: 'Submitted',
                 value: stats.planSubmitted,
                 sub: `${pct}% of plan`,
-                color: '#22c55e',
+                color: '#2E9E6B',
               },
               {
                 icon: '⏳',
                 label: 'In Pipeline',
                 value: stats.planPending,
                 sub: 'Yet to submit',
-                color: '#f97316',
+                color: '#E8A33D',
               },
               {
                 icon: '📋',
                 label: 'Active TL',
                 value: stats.tlActive.length,
                 sub: 'Test licences valid',
-                color: '#6366f1',
+                color: '#2A6FA8',
               },
               {
                 icon: '🏭',
                 label: 'Active ML',
                 value: stats.mlActive.length,
                 sub: 'Mfg licences valid',
-                color: '#7c3aed',
+                color: '#7A4F9E',
               },
               {
                 icon: '⚠️',
                 label: 'Expiring Soon',
                 value: stats.tlExpiring.length + stats.mlExpiring.length,
                 sub: 'Within 6 months',
-                color: '#eab308',
+                color: '#E8A33D',
               },
             ].map((c) => (
               <div
@@ -899,7 +900,8 @@ export default function RegulatoryDashboard() {
                   background: '#fff',
                   borderRadius: 12,
                   padding: '16px 18px',
-                  boxShadow: '0 1px 4px rgba(0,0,0,.07)',
+                  border: '1px solid #C5D8DA',
+        boxShadow: '0 1px 3px rgba(1,45,51,0.05)',
                   borderLeft: `4px solid ${c.color}`,
                 }}
               >
@@ -908,7 +910,7 @@ export default function RegulatoryDashboard() {
                   style={{
                     fontSize: 26,
                     fontWeight: 800,
-                    color: '#0f172a',
+                    color: '#012D33',
                     lineHeight: 1.2,
                   }}
                 >
@@ -927,7 +929,7 @@ export default function RegulatoryDashboard() {
           {/* TABS */}
           <div
             style={{
-              background: '#f1f5f9',
+              background: '#E4F2F3',
               borderRadius: '10px 10px 0 0',
               padding: '0 4px',
               display: 'flex',
@@ -972,7 +974,7 @@ export default function RegulatoryDashboard() {
                   <SectionTitle
                     icon="🗓"
                     title="H1 2026 Submission Plan Progress"
-                    color="#2563eb"
+                    color="#017481"
                   />
                   <div
                     style={{
@@ -986,7 +988,7 @@ export default function RegulatoryDashboard() {
                       style={{
                         flex: 1,
                         height: 12,
-                        background: '#f1f5f9',
+                        background: '#E4F2F3',
                         borderRadius: 6,
                         overflow: 'hidden',
                       }}
@@ -995,7 +997,7 @@ export default function RegulatoryDashboard() {
                         style={{
                           height: '100%',
                           width: `${pct}%`,
-                          background: 'linear-gradient(90deg,#2563eb,#22c55e)',
+                          background: 'linear-gradient(90deg,#017481,#2E9E6B)',
                           borderRadius: 6,
                           transition: 'width .5s',
                         }}
@@ -1005,7 +1007,7 @@ export default function RegulatoryDashboard() {
                       style={{
                         fontSize: 16,
                         fontWeight: 800,
-                        color: '#2563eb',
+                        color: '#017481',
                         whiteSpace: 'nowrap',
                       }}
                     >
@@ -1038,7 +1040,7 @@ export default function RegulatoryDashboard() {
                             style={{
                               fontWeight: 700,
                               fontSize: 12,
-                              color: '#0f172a',
+                              color: '#012D33',
                               marginBottom: 4,
                             }}
                           >
@@ -1055,7 +1057,7 @@ export default function RegulatoryDashboard() {
                           >
                             <span
                               style={{
-                                background: '#f1f5f9',
+                                background: '#E4F2F3',
                                 color: '#475569',
                                 padding: '1px 7px',
                                 borderRadius: 4,
@@ -1067,7 +1069,7 @@ export default function RegulatoryDashboard() {
                             </span>
                             <span
                               style={{
-                                background: '#f1f5f9',
+                                background: '#E4F2F3',
                                 color: '#475569',
                                 padding: '1px 7px',
                                 borderRadius: 4,
@@ -1089,7 +1091,7 @@ export default function RegulatoryDashboard() {
                                 🎯 {r.targetDate}
                               </span>
                               {r.grantedDate && r.grantedDate !== 'NA' && r.grantedDate !== '—' && (
-                                <span style={{ fontSize: 11, color: '#16a34a', fontWeight: 600 }}>
+                                <span style={{ fontSize: 11, color: '#2E9E6B', fontWeight: 600 }}>
                                   📄 {r.grantedDate}
                                 </span>
                               )}
@@ -1108,7 +1110,7 @@ export default function RegulatoryDashboard() {
                     icon="📋"
                     title="Active Test Licences"
                     count={stats.tlActive.length}
-                    color="#6366f1"
+                    color="#2A6FA8"
                   />
                   <div style={{ maxHeight: 320, overflowY: 'auto' }}>
                     {stats.tlActive.map((r) => (
@@ -1119,7 +1121,7 @@ export default function RegulatoryDashboard() {
                           justifyContent: 'space-between',
                           alignItems: 'flex-start',
                           padding: '8px 0',
-                          borderBottom: '1px solid #f8fafc',
+                          borderBottom: '1px solid #E4F2F3',
                           gap: 8,
                         }}
                       >
@@ -1128,7 +1130,7 @@ export default function RegulatoryDashboard() {
                             style={{
                               fontSize: 12,
                               fontWeight: 600,
-                              color: '#0f172a',
+                              color: '#012D33',
                               marginBottom: 2,
                             }}
                           >
@@ -1163,7 +1165,7 @@ export default function RegulatoryDashboard() {
                     icon="🏭"
                     title="Active Mfg Licences"
                     count={stats.mlActive.length}
-                    color="#7c3aed"
+                    color="#7A4F9E"
                   />
                   <div style={{ maxHeight: 320, overflowY: 'auto' }}>
                     {stats.mlActive.map((r) => (
@@ -1174,7 +1176,7 @@ export default function RegulatoryDashboard() {
                           justifyContent: 'space-between',
                           alignItems: 'flex-start',
                           padding: '8px 0',
-                          borderBottom: '1px solid #f8fafc',
+                          borderBottom: '1px solid #E4F2F3',
                           gap: 8,
                         }}
                       >
@@ -1183,7 +1185,7 @@ export default function RegulatoryDashboard() {
                             style={{
                               fontSize: 12,
                               fontWeight: 600,
-                              color: '#0f172a',
+                              color: '#012D33',
                               marginBottom: 2,
                             }}
                           >
@@ -1202,9 +1204,9 @@ export default function RegulatoryDashboard() {
                             <div style={{ marginTop: 3 }}>
                               <PdfBtn
                                 url={r.pdfUrl}
-                                color="#7c3aed"
-                                bg="#faf5ff"
-                                border="#e9d5ff"
+                                color="#7A4F9E"
+                                bg="#F4F0F9"
+                                border="#7A4F9E44"
                               />
                             </div>
                           )}
@@ -1223,12 +1225,12 @@ export default function RegulatoryDashboard() {
                     icon="⚠️"
                     title="Licences Expiring Soon (next 6 months)"
                     count={stats.tlExpiring.length + stats.mlExpiring.length}
-                    color="#f97316"
+                    color="#E8A33D"
                   />
                   {stats.tlExpiring.length + stats.mlExpiring.length === 0 ? (
                     <div
                       style={{
-                        color: '#22c55e',
+                        color: '#2E9E6B',
                         fontWeight: 600,
                         fontSize: 13,
                       }}
@@ -1245,7 +1247,7 @@ export default function RegulatoryDashboard() {
                         }}
                       >
                         <thead>
-                          <tr style={{ background: '#fef3c7' }}>
+                          <tr style={{ background: '#FCF4E6' }}>
                             {[
                               'Type',
                               'Licence No.',
@@ -1260,7 +1262,7 @@ export default function RegulatoryDashboard() {
                                   padding: '8px 12px',
                                   textAlign: 'left',
                                   fontWeight: 700,
-                                  color: '#92400e',
+                                  color: '#BA7517',
                                   borderBottom: '2px solid #fcd34d',
                                   whiteSpace: 'nowrap',
                                 }}
@@ -1289,9 +1291,9 @@ export default function RegulatoryDashboard() {
                                 <span
                                   style={{
                                     background:
-                                      r.ltype === 'TL' ? '#eff6ff' : '#faf5ff',
+                                      r.ltype === 'TL' ? '#E4F2F3' : '#F4F0F9',
                                     color:
-                                      r.ltype === 'TL' ? '#1d4ed8' : '#6d28d9',
+                                      r.ltype === 'TL' ? '#017481' : '#7A4F9E',
                                     padding: '2px 7px',
                                     borderRadius: 4,
                                     fontWeight: 700,
@@ -1315,7 +1317,7 @@ export default function RegulatoryDashboard() {
                                 style={{
                                   padding: '8px 12px',
                                   fontWeight: 600,
-                                  color: '#0f172a',
+                                  color: '#012D33',
                                 }}
                               >
                                 {r.name}
@@ -1332,9 +1334,9 @@ export default function RegulatoryDashboard() {
                                 ) : (
                                   <PdfBtn
                                     url={r.pdfUrl}
-                                    color="#7c3aed"
-                                    bg="#faf5ff"
-                                    border="#e9d5ff"
+                                    color="#7A4F9E"
+                                    bg="#F4F0F9"
+                                    border="#7A4F9E44"
                                   />
                                 )}
                               </td>
@@ -1355,7 +1357,7 @@ export default function RegulatoryDashboard() {
                       tlData.filter((r) => r.applied2026).length +
                       mlData.filter((r) => r.applied2026).length
                     }
-                    color="#0891b2"
+                    color="#017481"
                   />
                   <div
                     style={{
@@ -1369,7 +1371,7 @@ export default function RegulatoryDashboard() {
                       <div
                         style={{
                           fontWeight: 700,
-                          color: '#1e40af',
+                          color: '#017481',
                           fontSize: 12,
                           marginBottom: 10,
                           display: 'flex',
@@ -1379,7 +1381,7 @@ export default function RegulatoryDashboard() {
                       >
                         <span
                           style={{
-                            background: '#eff6ff',
+                            background: '#E4F2F3',
                             padding: '2px 8px',
                             borderRadius: 4,
                           }}
@@ -1396,7 +1398,7 @@ export default function RegulatoryDashboard() {
                           <div
                             key={r.id}
                             style={{
-                              background: '#f8fafc',
+                              background: '#F4F5F5',
                               borderRadius: 8,
                               padding: '9px 12px',
                               marginBottom: 7,
@@ -1407,7 +1409,7 @@ export default function RegulatoryDashboard() {
                               style={{
                                 fontWeight: 600,
                                 fontSize: 12,
-                                color: '#0f172a',
+                                color: '#012D33',
                                 marginBottom: 3,
                               }}
                             >
@@ -1456,7 +1458,7 @@ export default function RegulatoryDashboard() {
                       <div
                         style={{
                           fontWeight: 700,
-                          color: '#6d28d9',
+                          color: '#7A4F9E',
                           fontSize: 12,
                           marginBottom: 10,
                           display: 'flex',
@@ -1466,7 +1468,7 @@ export default function RegulatoryDashboard() {
                       >
                         <span
                           style={{
-                            background: '#faf5ff',
+                            background: '#F4F0F9',
                             padding: '2px 8px',
                             borderRadius: 4,
                           }}
@@ -1483,7 +1485,7 @@ export default function RegulatoryDashboard() {
                           <div
                             key={r.id}
                             style={{
-                              background: '#f8fafc',
+                              background: '#F4F5F5',
                               borderRadius: 8,
                               padding: '9px 12px',
                               marginBottom: 7,
@@ -1494,7 +1496,7 @@ export default function RegulatoryDashboard() {
                               style={{
                                 fontWeight: 600,
                                 fontSize: 12,
-                                color: '#0f172a',
+                                color: '#012D33',
                                 marginBottom: 3,
                               }}
                             >
@@ -1521,9 +1523,9 @@ export default function RegulatoryDashboard() {
                               <Badge status={r.expiryStatus} />
                               <PdfBtn
                                 url={r.pdfUrl}
-                                color="#7c3aed"
-                                bg="#faf5ff"
-                                border="#e9d5ff"
+                                color="#7A4F9E"
+                                bg="#F4F0F9"
+                                border="#7A4F9E44"
                               />
                             </div>
                           </div>
@@ -1554,26 +1556,26 @@ export default function RegulatoryDashboard() {
                     {
                       label: 'Total Planned',
                       value: stats.planTotal,
-                      color: '#2563eb',
-                      bg: '#eff6ff',
+                      color: '#017481',
+                      bg: '#E4F2F3',
                     },
                     {
                       label: 'Submitted / Applied',
                       value: stats.planSubmitted,
-                      color: '#22c55e',
-                      bg: '#f0fdf4',
+                      color: '#2E9E6B',
+                      bg: '#EAF6F0',
                     },
                     {
                       label: 'Still in Pipeline',
                       value: stats.planPending,
-                      color: '#f97316',
-                      bg: '#fff7ed',
+                      color: '#E8A33D',
+                      bg: '#FCF4E6',
                     },
                     {
                       label: 'Completion',
                       value: `${pct}%`,
-                      color: '#7c3aed',
-                      bg: '#faf5ff',
+                      color: '#7A4F9E',
+                      bg: '#F4F0F9',
                     },
                   ].map((c) => (
                     <div
@@ -1626,7 +1628,7 @@ export default function RegulatoryDashboard() {
                   <div
                     style={{
                       height: 14,
-                      background: '#f1f5f9',
+                      background: '#E4F2F3',
                       borderRadius: 8,
                       overflow: 'hidden',
                     }}
@@ -1635,7 +1637,7 @@ export default function RegulatoryDashboard() {
                       style={{
                         height: '100%',
                         width: `${pct}%`,
-                        background: 'linear-gradient(90deg,#2563eb,#22c55e)',
+                        background: 'linear-gradient(90deg,#017481,#2E9E6B)',
                         borderRadius: 8,
                         transition: 'width .5s',
                       }}
@@ -1652,7 +1654,7 @@ export default function RegulatoryDashboard() {
                   }}
                 >
                   <thead>
-                    <tr style={{ background: '#f8fafc' }}>
+                    <tr style={{ background: '#F4F5F5' }}>
                       {[
                         '#',
                         'Product',
@@ -1691,7 +1693,7 @@ export default function RegulatoryDashboard() {
                             background: ['Applied', 'Approved'].includes(
                               r.status
                             )
-                              ? '#f0fdf4'
+                              ? '#EAF6F0'
                               : 'transparent',
                           }}
                         >
@@ -1708,7 +1710,7 @@ export default function RegulatoryDashboard() {
                             style={{
                               padding: '12px 14px',
                               fontWeight: 700,
-                              color: '#0f172a',
+                              color: '#012D33',
                             }}
                           >
                             {r.name}
@@ -1717,11 +1719,11 @@ export default function RegulatoryDashboard() {
                             <span
                               style={{
                                 background: r.type?.includes('ML')
-                                  ? '#faf5ff'
-                                  : '#eff6ff',
+                                  ? '#F4F0F9'
+                                  : '#E4F2F3',
                                 color: r.type?.includes('ML')
-                                  ? '#6d28d9'
-                                  : '#1d4ed8',
+                                  ? '#7A4F9E'
+                                  : '#017481',
                                 padding: '3px 10px',
                                 borderRadius: 6,
                                 fontWeight: 700,
@@ -1764,11 +1766,11 @@ export default function RegulatoryDashboard() {
                   style={{
                     marginTop: 20,
                     padding: '12px 16px',
-                    background: '#fffbeb',
+                    background: '#FCF4E6',
                     borderRadius: 8,
                     border: '1px solid #fde68a',
                     fontSize: 12,
-                    color: '#92400e',
+                    color: '#BA7517',
                   }}
                 >
                   💡 <strong>Tip:</strong> Update the <strong>Status</strong>{' '}
@@ -1832,7 +1834,7 @@ export default function RegulatoryDashboard() {
                     }}
                   >
                     <thead>
-                      <tr style={{ background: '#f8fafc' }}>
+                      <tr style={{ background: '#F4F5F5' }}>
                         {[
                           '#',
                           'Portal',
@@ -1867,7 +1869,7 @@ export default function RegulatoryDashboard() {
                           style={{
                             borderBottom: '1px solid #f1f5f9',
                             background: r.applied2026
-                              ? '#fffbeb'
+                              ? '#FCF4E6'
                               : 'transparent',
                           }}
                         >
@@ -1878,9 +1880,9 @@ export default function RegulatoryDashboard() {
                             <span
                               style={{
                                 background:
-                                  r.portal === 'NSWS' ? '#ecfdf5' : '#eff6ff',
+                                  r.portal === 'NSWS' ? '#EAF6F0' : '#E4F2F3',
                                 color:
-                                  r.portal === 'NSWS' ? '#166534' : '#1e40af',
+                                  r.portal === 'NSWS' ? '#2E9E6B' : '#017481',
                                 padding: '2px 7px',
                                 borderRadius: 4,
                                 fontWeight: 600,
@@ -1893,8 +1895,8 @@ export default function RegulatoryDashboard() {
                               <span
                                 style={{
                                   marginLeft: 4,
-                                  background: '#fef9c3',
-                                  color: '#92400e',
+                                  background: '#FCF4E6',
+                                  color: '#BA7517',
                                   padding: '1px 5px',
                                   borderRadius: 4,
                                   fontSize: 9,
@@ -1920,7 +1922,7 @@ export default function RegulatoryDashboard() {
   style={{
     padding: '8px 12px',
     fontWeight: 600,
-    color: '#0f172a',
+    color: '#012D33',
     maxWidth: 200,
   }}
 >
@@ -1928,8 +1930,8 @@ export default function RegulatoryDashboard() {
   {stats.mlActiveNames.has(r.name?.toLowerCase().trim()) && (
     <div style={{ marginTop: 3 }}>
       <span style={{
-        fontSize: 9, fontWeight: 700, background: '#dcfce7',
-        color: '#16a34a', padding: '1px 6px', borderRadius: 4,
+        fontSize: 9, fontWeight: 700, background: '#EAF6F0',
+        color: '#2E9E6B', padding: '1px 6px', borderRadius: 4,
         border: '1px solid #86efac'
       }}>
         🏭 ML Active — TL expiry N/A
@@ -2038,7 +2040,7 @@ export default function RegulatoryDashboard() {
                     }}
                   >
                     <thead>
-                      <tr style={{ background: '#f8fafc' }}>
+                      <tr style={{ background: '#F4F5F5' }}>
                         {[
                           '#',
                           'Licence No.',
@@ -2073,7 +2075,7 @@ export default function RegulatoryDashboard() {
                           style={{
                             borderBottom: '1px solid #f1f5f9',
                             background: r.applied2026
-                              ? '#fffbeb'
+                              ? '#FCF4E6'
                               : 'transparent',
                           }}
                         >
@@ -2094,8 +2096,8 @@ export default function RegulatoryDashboard() {
                               <span
                                 style={{
                                   marginLeft: 4,
-                                  background: '#fef9c3',
-                                  color: '#92400e',
+                                  background: '#FCF4E6',
+                                  color: '#BA7517',
                                   padding: '1px 5px',
                                   borderRadius: 4,
                                   fontSize: 9,
@@ -2110,7 +2112,7 @@ export default function RegulatoryDashboard() {
                             style={{
                               padding: '8px 12px',
                               fontWeight: 600,
-                              color: '#0f172a',
+                              color: '#012D33',
                               maxWidth: 200,
                             }}
                           >
@@ -2119,9 +2121,9 @@ export default function RegulatoryDashboard() {
                               <div style={{ marginTop: 4 }}>
                                 <PdfBtn
                                   url={r.pdfUrl}
-                                  color="#7c3aed"
-                                  bg="#faf5ff"
-                                  border="#e9d5ff"
+                                  color="#7A4F9E"
+                                  bg="#F4F0F9"
+                                  border="#7A4F9E44"
                                 />
                               </div>
                             )}
@@ -2187,12 +2189,12 @@ export default function RegulatoryDashboard() {
                     icon="🔴"
                     title="Expired Licences"
                     count={stats.tlExpired.length + stats.mlExpired.length}
-                    color="#ef4444"
+                    color="#E0683C"
                   />
                   {stats.tlExpired.length + stats.mlExpired.length === 0 ? (
                     <div
                       style={{
-                        color: '#22c55e',
+                        color: '#2E9E6B',
                         fontWeight: 600,
                         fontSize: 13,
                       }}
@@ -2209,7 +2211,7 @@ export default function RegulatoryDashboard() {
                         }}
                       >
                         <thead>
-                          <tr style={{ background: '#fef2f2' }}>
+                          <tr style={{ background: '#FBEDE6' }}>
                             {[
                               'Type',
                               'Licence No.',
@@ -2225,7 +2227,7 @@ export default function RegulatoryDashboard() {
                                   padding: '8px 12px',
                                   textAlign: 'left',
                                   fontWeight: 700,
-                                  color: '#991b1b',
+                                  color: '#A32D2D',
                                   borderBottom: '2px solid #fecaca',
                                   whiteSpace: 'nowrap',
                                 }}
@@ -2258,12 +2260,12 @@ export default function RegulatoryDashboard() {
                                     style={{
                                       background:
                                         r.ltype === 'TL'
-                                          ? '#eff6ff'
-                                          : '#faf5ff',
+                                          ? '#E4F2F3'
+                                          : '#F4F0F9',
                                       color:
                                         r.ltype === 'TL'
-                                          ? '#1d4ed8'
-                                          : '#6d28d9',
+                                          ? '#017481'
+                                          : '#7A4F9E',
                                       padding: '2px 7px',
                                       borderRadius: 4,
                                       fontWeight: 700,
@@ -2287,7 +2289,7 @@ export default function RegulatoryDashboard() {
                                   style={{
                                     padding: '8px 12px',
                                     fontWeight: 600,
-                                    color: '#0f172a',
+                                    color: '#012D33',
                                   }}
                                 >
                                   {r.name}
@@ -2307,7 +2309,7 @@ export default function RegulatoryDashboard() {
                                 <td
                                   style={{
                                     padding: '8px 12px',
-                                    color: '#ef4444',
+                                    color: '#E0683C',
                                     fontWeight: 600,
                                     whiteSpace: 'nowrap',
                                   }}
@@ -2323,8 +2325,8 @@ export default function RegulatoryDashboard() {
                                 <td style={{ padding: '8px 12px' }}>
                                   <span
                                     style={{
-                                      background: '#fef2f2',
-                                      color: '#ef4444',
+                                      background: '#FBEDE6',
+                                      color: '#E0683C',
                                       border: '1px solid #fecaca',
                                       borderRadius: 6,
                                       padding: '2px 8px',
@@ -2341,9 +2343,9 @@ export default function RegulatoryDashboard() {
                                   ) : (
                                     <PdfBtn
                                       url={r.pdfUrl}
-                                      color="#7c3aed"
-                                      bg="#faf5ff"
-                                      border="#e9d5ff"
+                                      color="#7A4F9E"
+                                      bg="#F4F0F9"
+                                      border="#7A4F9E44"
                                     />
                                   )}
                                 </td>
@@ -2362,12 +2364,12 @@ export default function RegulatoryDashboard() {
                     icon="⚠️"
                     title="Expiring Soon (next 6 months)"
                     count={stats.tlExpiring.length + stats.mlExpiring.length}
-                    color="#f97316"
+                    color="#E8A33D"
                   />
                   {stats.tlExpiring.length + stats.mlExpiring.length === 0 ? (
                     <div
                       style={{
-                        color: '#22c55e',
+                        color: '#2E9E6B',
                         fontWeight: 600,
                         fontSize: 13,
                       }}
@@ -2412,9 +2414,9 @@ export default function RegulatoryDashboard() {
                               <span
                                 style={{
                                   background:
-                                    r.ltype === 'TL' ? '#eff6ff' : '#faf5ff',
+                                    r.ltype === 'TL' ? '#E4F2F3' : '#F4F0F9',
                                   color:
-                                    r.ltype === 'TL' ? '#1d4ed8' : '#6d28d9',
+                                    r.ltype === 'TL' ? '#017481' : '#7A4F9E',
                                   padding: '1px 7px',
                                   borderRadius: 4,
                                   fontWeight: 700,
@@ -2427,7 +2429,7 @@ export default function RegulatoryDashboard() {
                                 style={{
                                   fontWeight: 700,
                                   fontSize: 13,
-                                  color: '#0f172a',
+                                  color: '#012D33',
                                 }}
                               >
                                 {r.name}
@@ -2450,9 +2452,9 @@ export default function RegulatoryDashboard() {
                             ) : (
                               <PdfBtn
                                 url={r.pdfUrl}
-                                color="#7c3aed"
-                                bg="#faf5ff"
-                                border="#e9d5ff"
+                                color="#7A4F9E"
+                                bg="#F4F0F9"
+                                border="#7A4F9E44"
                               />
                             )}
                           </div>
@@ -2471,12 +2473,12 @@ export default function RegulatoryDashboard() {
                     icon="⏳"
                     title="Still in Pipeline"
                     count={stats.planPending}
-                    color="#f97316"
+                    color="#E8A33D"
                   />
                   {stats.planPending === 0 ? (
                     <div
                       style={{
-                        color: '#22c55e',
+                        color: '#2E9E6B',
                         fontWeight: 600,
                         fontSize: 13,
                       }}
@@ -2515,7 +2517,7 @@ export default function RegulatoryDashboard() {
                                   style={{
                                     fontWeight: 700,
                                     fontSize: 13,
-                                    color: '#0f172a',
+                                    color: '#012D33',
                                   }}
                                 >
                                   {r.name}
