@@ -1695,10 +1695,7 @@ export default function RegulatoryDashboard() {
                             )
                               ? '#EAF6F0'
                               : 'transparent',
-                            borderLeft:
-                              r.status === 'Granted'
-                                ? '3px solid #2E9E6B'
-                                : '3px solid transparent',
+                            
                           }}
                         >
                           <td
