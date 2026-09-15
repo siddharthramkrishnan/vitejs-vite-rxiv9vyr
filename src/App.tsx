@@ -1694,8 +1694,6 @@ export default function RegulatoryDashboard() {
                               r.status
                             )
                               ? '#EAF6F0'
-                              : r.status === 'Granted'
-                              ? '#D6F0E1'
                               : 'transparent',
                             borderLeft:
                               r.status === 'Granted'
