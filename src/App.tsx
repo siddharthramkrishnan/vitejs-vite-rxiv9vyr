@@ -1690,7 +1690,7 @@ export default function RegulatoryDashboard() {
                           key={r.id}
                           style={{
                             borderBottom: '1px solid #f1f5f9',
-                            background: ['Applied', 'Approved'].includes(
+                            background: ['Applied', 'Approved', 'Granted'].includes(
                               r.status
                             )
                               ? '#EAF6F0'
