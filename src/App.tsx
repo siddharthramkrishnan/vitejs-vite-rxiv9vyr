@@ -282,7 +282,9 @@ function AgingBadge({ applicationDate, cdscoStatus, grantedDate }) {
 
   const fmt = (d) => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
-  const grantD = grantedDate && grantedDate !== 'NA' && grantedDate !== '—' ? parseDate(grantedDate) : null;
+  const statusLower = (cdscoStatus || '').toLowerCase();
+  const isApproved = statusLower.includes('approved') || statusLower.includes('granted');
+  const grantD = isApproved && grantedDate && grantedDate !== 'NA' && grantedDate !== '—' ? parseDate(grantedDate) : null;
   if (grantD) {
     const days = Math.ceil((grantD - appD) / 86400000);
     return (
